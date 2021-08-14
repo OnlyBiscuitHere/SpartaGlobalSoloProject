@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using BlappyFird;
 
 namespace SoloProject
 {
@@ -20,9 +21,20 @@ namespace SoloProject
     /// </summary>
     public partial class MainWindow : Window
     {
+        private BlappyFirdLogic _blappyFird;
         public MainWindow()
         {
             InitializeComponent();
+        }
+
+        private void Game_KeyDown(object sender, KeyEventArgs e)
+        {
+
+        }
+
+        private void Game_KeyUp(object sender, KeyEventArgs e)
+        {
+
         }
     }
 }
