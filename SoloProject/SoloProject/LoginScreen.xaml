@@ -5,8 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SoloProject"
         mc:Ignorable="d"
-        Title="LoginScreen" Height="319" Width="300">
-    <Border Background="LightGreen" CornerRadius="20" Margin="20">
+        Title="LoginScreen" Height="350" Width="300">
+    <Border Background="LightGreen" CornerRadius="20" Margin="20,20,20,11">
         <StackPanel Margin="20">
             <Label Content="Login" Foreground="White" FontSize="25" HorizontalAlignment="Center"/>
             <Separator></Separator>
@@ -15,6 +15,7 @@
             <Label Content="Password" Foreground="White"/>
             <PasswordBox Name="txtPassword" Background="LightGray" Foreground="White" FontSize="18"/>
             <Button Name="btnSubmit" Click="btnSubmit_Click" Content="Submit" Margin="60 10" Background="LightGray" Foreground="White" FontSize="18"/>
+            <Button Name="btnCreate" Click="btnCreate_Click" Content="Create an account" Background="LightGray" Foreground="White" FontSize="18" Width="161"/>
         </StackPanel>
     </Border>
 </Window>

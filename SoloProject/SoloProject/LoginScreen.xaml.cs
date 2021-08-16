@@ -60,5 +60,10 @@ namespace SoloProject
                 sqlConnection.Close();
             }
         }
+
+        private void btnCreate_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }
