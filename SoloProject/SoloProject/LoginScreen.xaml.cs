@@ -12,6 +12,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using BlappyFird;
 
 namespace SoloProject
 {
@@ -20,50 +21,39 @@ namespace SoloProject
     /// </summary>
     public partial class LoginScreen : Window
     {
+        private BlappyFirdLogic _logic = new BlappyFirdLogic();
         public LoginScreen()
         {
             InitializeComponent();
         }
-
         private void btnSubmit_Click(object sender, RoutedEventArgs e)
         {
-            SqlConnection sqlConnection = new SqlConnection(@"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=ProjectDB;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False");
-            try
+            var username = txtUsername.Text;
+            var password = txtPassword.Password;
+            var pass = _logic.checkUser(username, password);
+            if (username == "user1" && password == "123")
             {
-                if (sqlConnection.State == System.Data.ConnectionState.Closed)
-                {
-                    sqlConnection.Open();
-                    String query = "SELECT COUNT(1) FROM dbo.Users WHERE Username=@Username AND Password=@Password";
-                    SqlCommand sqlcommand = new SqlCommand(query, sqlConnection);
-                    sqlcommand.CommandType = System.Data.CommandType.Text;
-                    sqlcommand.Parameters.AddWithValue("@Username", txtUsername.Text);
-                    sqlcommand.Parameters.AddWithValue("@Password", txtPassword.Password);
-                    int count = Convert.ToInt32(sqlcommand.ExecuteScalar());
-                    if (count == 1)
-                    {
-                        MainWindow dashboard = new MainWindow();
-                        dashboard.Show();
-                        this.Close();
-                    }
-                    else
-                    {
-                        MessageBox.Show("Username or password is incorrect");
-                    }
-                }
+                AdminScreen admin = new AdminScreen();
+                admin.Show();
+                this.Close();
             }
-            catch (Exception ex)
+            else if (pass == true)
             {
-                MessageBox.Show(ex.Message);
+                var userid = _logic.returnUser(username);
+                MainWindow dashboard = new MainWindow(userid, username);
+                dashboard.Show();
+                this.Close();
             }
-            finally
+            else
             {
-                sqlConnection.Close();
+                MessageBox.Show("Username or password is incorrect");
             }
         }
-
         private void btnCreate_Click(object sender, RoutedEventArgs e)
         {
-
+            CreateScreen createScreen = new CreateScreen();
+            createScreen.Show();
+            this.Close();
         }
     }
 }

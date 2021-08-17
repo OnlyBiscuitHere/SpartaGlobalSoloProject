@@ -15,7 +15,6 @@ using System.Windows.Shapes;
 using System.Windows.Threading;
 using System.Timers;
 using BlappyFird;
-using System.Diagnostics;
 
 namespace SoloProject
 {
@@ -24,74 +23,32 @@ namespace SoloProject
     /// </summary>
     public partial class MainWindow : Window
     {
-        //DispatcherTimer gameTimer = new DispatcherTimer();
+        private BlappyFirdLogic _logic = new BlappyFirdLogic();
         Timer gameTimer = new Timer();
         //private BlappyFirdLogic _blappyFird;
         public double score;
         public int gravity = 8;
         public bool gameOver;
-        
+        private int id;
+        private readonly string user = "";
         Rect hitBox;
-        public MainWindow()
+
+        public MainWindow(int userid, string username)
         {
             InitializeComponent();
-            //gameTimer.Tick += MainEventTimer;
+            id = userid;
+            user = username;
             gameTimer = new System.Timers.Timer(10);
             gameTimer.Elapsed += MainEventTimer;
             gameTimer.AutoReset = true;
             gameTimer.Enabled = true;
-            
-            //gameTimer.Interval = TimeSpan.FromMilliseconds(20);
             StartGame();
         }
         private void MainEventTimer(object sender, EventArgs e)
         {
-            /*
-            txtScore.Content = $"Score: {score}";
-            hitBox = new Rect(Canvas.GetLeft(flappyBird), Canvas.GetTop(flappyBird), flappyBird.Width - 12, flappyBird.Height);
-            Canvas.SetTop(flappyBird, Canvas.GetTop(flappyBird) + gravity);
-            if (Canvas.GetTop(flappyBird) < -30 || Canvas.GetTop(flappyBird) + flappyBird.Height > 460)
-            {
-                EndGame();
-            }
-            foreach (var x in Game.Children.OfType<Image>())
-            {
-                if ((string)x.Tag == "obs1" || (string)x.Tag == "obs2" || (string)x.Tag == "obs3")
-                {
-                    Canvas.SetLeft(x, Canvas.GetLeft(x) - 5);
-
-                    if (Canvas.GetLeft(x) < -100)
-                    {
-                        Canvas.SetLeft(x, 800);
-
-                        score += .5;
-                    }
-
-                    Rect pillarHitBox = new Rect(Canvas.GetLeft(x), Canvas.GetTop(x), x.Width, x.Height);
-
-                    if (hitBox.IntersectsWith(pillarHitBox))
-                    {
-                        EndGame();
-                    }
-                }
-
-                if ((string)x.Tag == "clouds")
-                {
-                    Canvas.SetLeft(x, Canvas.GetLeft(x) - 1);
-
-                    if (Canvas.GetLeft(x) < -250)
-                    {
-                        Canvas.SetLeft(x, 550);
-
-                        score += .5;
-                    }
-
-                }
-            }
-            */
             this.Dispatcher.Invoke(() =>
             {
-                txtScore.Content = $"Score: {score}";
+                txtScore.Content = $"Player: {user} Score: {score}";
                 hitBox = new Rect(Canvas.GetLeft(flappyBird), Canvas.GetTop(flappyBird), flappyBird.Width - 12, flappyBird.Height);
                 Canvas.SetTop(flappyBird, Canvas.GetTop(flappyBird) + gravity);
                 if (Canvas.GetTop(flappyBird) < -30 || Canvas.GetTop(flappyBird) + flappyBird.Height > 460)
@@ -103,22 +60,18 @@ namespace SoloProject
                     if ((string)x.Tag == "obs1" || (string)x.Tag == "obs2" || (string)x.Tag == "obs3")
                     {
                         Canvas.SetLeft(x, Canvas.GetLeft(x) - 5);
-
                         if (Canvas.GetLeft(x) < -100)
                         {
                             Canvas.SetLeft(x, 800);
 
                             score += .5;
                         }
-
                         Rect pillarHitBox = new Rect(Canvas.GetLeft(x), Canvas.GetTop(x), x.Width, x.Height);
-
                         if (hitBox.IntersectsWith(pillarHitBox))
                         {
                             EndGame();
                         }
                     }
-
                     if ((string)x.Tag == "clouds")
                     {
                         Canvas.SetLeft(x, Canvas.GetLeft(x) - 1);
@@ -133,7 +86,6 @@ namespace SoloProject
                     }
                 }
             });
-
         }
         private void Game_KeyDown(object sender, KeyEventArgs e)
         {
@@ -148,7 +100,6 @@ namespace SoloProject
                 StartGame();
             }
         }
-
         private void Game_KeyUp(object sender, KeyEventArgs e)
         {
             flappyBird.RenderTransform = new RotateTransform(5, flappyBird.Width / 2, flappyBird.Height / 2);

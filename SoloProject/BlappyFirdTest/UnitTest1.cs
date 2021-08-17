@@ -1,10 +1,14 @@
 using NUnit.Framework;
 using System;
+using BlappyFird;
+using BlappyFirdContext;
+using System.Linq;
 
 namespace BlappyFirdTest
 {
     public class Tests
     {
+        private BlappyFirdLogic _logic = new BlappyFirdLogic();
         [SetUp]
         public void Setup()
         {
@@ -13,12 +17,14 @@ namespace BlappyFirdTest
         [Test]
         public void WhenAUserIsAdded_NumberOfUsersIncrements()
         {
-            throw new NotImplementedException();
-        }
-        [Test]
-        public void WhenAnAdminIsAdded_NumberOfAdminsIncrements()
-        {
-            throw new NotImplementedException();
+            using (var db = new BFContext())
+            {
+                var query = db.Users;
+                var beforeCount = query.Count();
+                _logic.addUser("Testing", "Tester", DateTime.Now);
+                var afterCount = query.Count();
+                Assert.That(afterCount > beforeCount, Is.EqualTo(true));
+            }
         }
         [Test]
         public void WhenAUsernameIsChanged_DatabaseIsUpdated()
@@ -28,7 +34,15 @@ namespace BlappyFirdTest
         [Test]
         public void WhenAnAdminRemovesAUser_NumberOfUsersDecrements()
         {
-            throw new NotImplementedException();
+            using (var db = new BFContext())
+            {
+                _logic.addUser("Testing", "Tester", DateTime.Now);
+                var query = from u in db.Users where u.Username == "Testing" select u;
+                var beforeCount = query.Count();
+                _logic.deleteUser(query.FirstOrDefault().UsersId);
+                var afterCount = query.Count();
+                Assert.That(afterCount < beforeCount, Is.EqualTo(true));
+            }
         }
         [Test]
         public void WhenAUserFinishesARound_ScoreIsUpdated()
