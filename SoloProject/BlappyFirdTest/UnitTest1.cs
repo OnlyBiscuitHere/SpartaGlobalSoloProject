@@ -27,11 +27,6 @@ namespace BlappyFirdTest
             }
         }
         [Test]
-        public void WhenAUsernameIsChanged_DatabaseIsUpdated()
-        {
-            throw new NotImplementedException();
-        }
-        [Test]
         public void WhenAnAdminRemovesAUser_NumberOfUsersDecrements()
         {
             using (var db = new BFContext())
@@ -45,36 +40,36 @@ namespace BlappyFirdTest
             }
         }
         [Test]
-        public void WhenAUserFinishesARound_ScoreIsUpdated()
+        public void WhenAUserChangesDifficulty_DifficultyForUserChanges()
         {
-            throw new NotImplementedException();
-        }
-        [Category("Database Tier - Advacned CRUD")]
-        [Test]
-        public void WhenAnInvalidUsernameOrPasswordIsInputted_MessageBoxIsShown()
-        {
-            throw new NotImplementedException();
-        }
-        [Test]
-        public void WhenAUserWantsToSeeLeaderBoard_LeaderBoardIsOutputted()
-        {
-            throw new NotImplementedException();
+            using (var db = new BFContext())
+            {
+                var before = db.Difficulty.Where(x => x.UsersId == 1).FirstOrDefault().Speed;
+                _logic.updateSpeed(1, 100, "increase");
+                var after = db.Difficulty.Where(x => x.UsersId == 1).FirstOrDefault().Speed;
+                Assert.That(before, Is.Not.EqualTo(after));
+            }
         }
         [Test]
-        public void WhenAnAdminWantsToViewUserData_UserDataIsOutputted()
+        public void WhenAUserChecksLeaderboard_LeaderboardIsReturned()
         {
-            throw new NotImplementedException();
+            using (var db = new BFContext())
+            {
+                var query = db.Users.Join(db.Scores, 
+                    user => user.UsersId, 
+                    score => score.UsersId, 
+                    (user, score) => 
+                    new { username = user.Username, highest = score.HighestScore, created = user.Created }).ToList();
+                var testQuery = BlappyFirdLogic.GetLeaderboard();
+                Assert.That(query, Is.EqualTo(testQuery));
+            }
         }
-
         [Category("Logic/Game Tier")]
         [Test]
         public void WhenAUserSubmitsFeedback_FeedbackIsRecieved()
         {
             throw new NotImplementedException();
         }
-        public void WhenAUserWantsToSeeTheControlsForTheGame_MethodIsCalled()
-        {
-            throw new NotImplementedException();
-        }
+
     }
 }

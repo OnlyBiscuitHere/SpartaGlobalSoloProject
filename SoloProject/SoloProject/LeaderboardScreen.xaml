@@ -1,0 +1,26 @@
+﻿<Window x:Class="SoloProject.LeaderboardScreen"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:SoloProject"
+        mc:Ignorable="d"
+        Title="LeaderboardScreen" Height="350" Width="300">
+    <Border Background="LightGreen" CornerRadius="20" Margin="20,20,20,11">
+        <StackPanel Margin="20">
+            <Label Content="Leaderboard" Foreground="White" FontSize="25" HorizontalAlignment="Center"/>
+            <Separator></Separator>
+            <Grid>
+                <ListView HorizontalAlignment="Center" VerticalAlignment="Top" Name="Leaderboard">
+                    <ListView.View>
+                        <GridView x:Name="GridView1">
+                            <GridViewColumn DisplayMemberBinding="{Binding Username}" Header="Username"/>
+                            <GridViewColumn DisplayMemberBinding="{Binding Highscore}" Header="Highscore"/>
+                            <GridViewColumn DisplayMemberBinding="{Binding Created}" Header="Account created"/>
+                        </GridView>
+                    </ListView.View>
+                </ListView>
+            </Grid>
+        </StackPanel>
+    </Border>
+</Window>

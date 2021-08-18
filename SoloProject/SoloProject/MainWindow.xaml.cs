@@ -31,14 +31,16 @@ namespace SoloProject
         public bool gameOver;
         private int id;
         private readonly string user = "";
+        private int gameSpeed;
         Rect hitBox;
 
-        public MainWindow(int userid, string username)
+        public MainWindow(int userid, string username, int speed)
         {
             InitializeComponent();
             id = userid;
             user = username;
-            gameTimer = new System.Timers.Timer(10);
+            gameSpeed = speed;
+            gameTimer = new System.Timers.Timer(speed);
             gameTimer.Elapsed += MainEventTimer;
             gameTimer.AutoReset = true;
             gameTimer.Enabled = true;
@@ -99,6 +101,38 @@ namespace SoloProject
             {
                 StartGame();
             }
+            if (e.Key == Key.Escape && gameOver == true)
+            {
+                LoginScreen back = new LoginScreen();
+                back.Show();
+                this.Close();
+            }
+            if (e.Key == Key.Y && gameOver == true)
+            {
+                string value = "increase";
+                gameSpeed = _logic.getSpeed(id);
+                _logic.updateSpeed(id, gameSpeed, value);
+                MainWindow newGame = new MainWindow(id, user, gameSpeed);
+                Application.Current.MainWindow = newGame;
+                newGame.Show();
+                this.Close();
+                
+            }
+            if (e.Key == Key.N && gameOver == true)
+            {
+                string value = "decrease";
+                gameSpeed = _logic.getSpeed(id);
+                _logic.updateSpeed(id, gameSpeed, value);
+                MainWindow newGame = new MainWindow(id, user, gameSpeed);
+                Application.Current.MainWindow = newGame;
+                newGame.Show();
+                this.Close();
+            }
+            if (e.Key == Key.L && gameOver == true)
+            {
+                LeaderboardScreen leaderboard = new LeaderboardScreen();
+                leaderboard.Show();
+            }
         }
         private void Game_KeyUp(object sender, KeyEventArgs e)
         {
@@ -146,7 +180,11 @@ namespace SoloProject
         {
             gameTimer.Stop();
             gameOver = true;
+            int newScore = Convert.ToInt32(score);
+            _logic.updateScore(id, newScore);
             txtScore.Content += " Game Over!!! Press R to restart.";
+            txtExtra1.Content = "Press L to view Leaderboard, Press ESC to Login Screen";
+            txtExtra2.Content = "Y to increase difficulty, N to decrease difficulty";
         }
     }
 }

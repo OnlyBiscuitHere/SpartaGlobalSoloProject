@@ -31,7 +31,7 @@ namespace SoloProject
             var username = txtUsername.Text;
             var password = txtPassword.Password;
             var pass = _logic.checkUser(username, password);
-            if (username == "user1" && password == "123")
+            if (username == "admin" && password == "123")
             {
                 AdminScreen admin = new AdminScreen();
                 admin.Show();
@@ -40,7 +40,8 @@ namespace SoloProject
             else if (pass == true)
             {
                 var userid = _logic.returnUser(username);
-                MainWindow dashboard = new MainWindow(userid, username);
+                int speed = _logic.getSpeed(userid);
+                MainWindow dashboard = new MainWindow(userid, username, speed);
                 dashboard.Show();
                 this.Close();
             }

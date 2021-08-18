@@ -25,9 +25,13 @@ namespace BlappyFird
         public void addUser(string username, string password, DateTime date)
         {
             var newUser = new Users() { Username = username, Password = password, Created = date };
+            var newUserDifficulty = new Difficulty() { UsersId = newUser.UsersId, Speed = 100 };
+            var newUserScore = new Scores() { UsersId = newUser.UsersId, RecentScore = 0 };
             using (var db = new BFContext())
             {
                 db.Users.Add(newUser);
+                db.Difficulty.Add(newUserDifficulty);
+                db.Scores.Add(newUserScore);
                 db.SaveChanges();
             }
         }
@@ -63,25 +67,107 @@ namespace BlappyFird
                     return false;
             }
         }
-        public void createSpeed(int userId)
-        {
-            using (var db = new BFContext())
-            {
-                Difficulty hard = new Difficulty() { Speed = 10 };
-                Difficulty medium = new Difficulty() { Speed = 500 };
-                Difficulty easy = new Difficulty() { Speed = 600 };
-                db.Difficulty.Add(hard);
-                db.Difficulty.Add(medium);
-                db.Difficulty.Add(easy);
-                db.SaveChanges();
-            }
-        }
         public void updateScore(int userId, int score)
         {
             using (var db = new BFContext())
             {
-                Scores newScore = new Scores() { UsersId = userId, RecentScore = score };
-                db.Scores.Add(newScore);
+                var query = db.Scores.Where(x => x.UsersId == userId);
+                if (query.Count() == 1)
+                {
+                    if (query.FirstOrDefault().HighestScore < score)
+                    {
+                        query.FirstOrDefault().HighestScore = score;
+                    }
+                    query.FirstOrDefault().RecentScore = score;
+                }
+                else
+                {
+                    Scores newScore = new Scores() { UsersId = userId, RecentScore = score, HighestScore = score };
+                    db.Scores.Add(newScore);
+                }
+                db.SaveChanges();
+            }
+        }
+        public void createSpeed(int userId)
+        {
+            using (var db = new BFContext())
+            {
+                Difficulty newUser = new Difficulty() { Speed = 0 };
+                db.Difficulty.Add(newUser);
+                db.SaveChanges();
+            }
+        }
+        public int getSpeed(int userId)
+        {
+            using (var db = new BFContext())
+            {
+                var query = db.Difficulty.Where(x => x.UsersId == userId);
+                if (query.Count() == 1)
+                {
+                    return query.FirstOrDefault().Speed;
+                }
+                else
+                    return 100;
+            }
+        }
+        public void updateSpeed(int userId, int speed, string difficulty)
+        {
+            using (var db = new BFContext())
+            {
+                var query = db.Difficulty.Where(x => x.UsersId == userId);
+                if (query.Count() == 1)
+                {
+                    if (difficulty == "increase")
+                    {
+                        switch (speed)
+                        {
+                            case 50:
+                                query.FirstOrDefault().Speed = 10;
+                                break;
+                            case 100:
+                                query.FirstOrDefault().Speed = 50;
+                                break;
+                            case 150:
+                                query.FirstOrDefault().Speed = 100;
+                                break;
+                        }
+                    }
+                    else
+                    {
+                        switch (speed)
+                        {
+                            case 50:
+                                query.FirstOrDefault().Speed = 100;
+                                break;
+                            case 10:
+                                query.FirstOrDefault().Speed = 50;
+                                break;
+                            case 100:
+                                query.FirstOrDefault().Speed = 150;
+                                break;
+                        }
+                    }
+                }
+                db.SaveChanges();
+            }
+        }
+        public class Query
+        {
+            public virtual string Username { get; set; }
+            public virtual int Highscore { get; set; }
+            public virtual DateTime? Created { get; set; }
+        }
+
+        public static List<Query> GetLeaderboard()
+        {
+            using (var db = new BFContext())
+            {
+                var query = from user in db.Users
+                            join score in db.Scores on user.UsersId equals score.UsersId
+                            where user.Username != "admin"
+                            orderby score.HighestScore descending
+                            select new Query{ Username = user.Username, Highscore = score.HighestScore, Created = user.Created};
+                return query.ToList();
             }
         }
     }

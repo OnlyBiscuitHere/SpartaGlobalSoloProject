@@ -62,5 +62,11 @@ namespace SoloProject
             returnToLogin.Show();
             this.Close();
         }
+
+        private void btnLeaderboard_Click(object sender, RoutedEventArgs e)
+        {
+            LeaderboardScreen adminLeaderboard = new LeaderboardScreen();
+            adminLeaderboard.Show();
+        }
     }
 }
