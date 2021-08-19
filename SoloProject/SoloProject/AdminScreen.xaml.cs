@@ -24,14 +24,9 @@ namespace SoloProject
         public AdminScreen()
         {
             InitializeComponent();
-        }
-
-        private void ListBoxUsers_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
             ListBoxUsers.ItemsSource = _logic.printAllUsers();
         }
-
-        private void btnUpdate_Click(object sender, RoutedEventArgs e)
+        private void PopulateUserFields()
         {
             if (_logic.selectedUser != null)
             {
@@ -40,6 +35,22 @@ namespace SoloProject
                 txtPassword.Text = _logic.selectedUser.Password;
                 txtCreated.Text = _logic.selectedUser.Created.ToString();
             }
+        }
+        private void ListBoxUsers_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (ListBoxUsers.SelectedItem != null)
+            {
+                _logic.setSelectedUser(ListBoxUsers.SelectedItem);
+                PopulateUserFields();
+            }
+        }
+        private void btnUpdate_Click(object sender, RoutedEventArgs e)
+        {
+            _logic.updateUser(userId: Convert.ToInt32(txtId.Text), username: txtUsername.Text, password: txtPassword.Text);
+            ListBoxUsers.ItemsSource = null;
+            PopulateUserFields();
+            ListBoxUsers.SelectedItem = _logic.selectedUser;
+            ListBoxUsers.ItemsSource = _logic.printAllUsers();
         }
 
         private void btnDelete_Click(object sender, RoutedEventArgs e)
@@ -50,6 +61,7 @@ namespace SoloProject
                 if (deleted)
                 {
                     MessageBox.Show("User has been deleted");
+                    ListBoxUsers.ItemsSource = _logic.printAllUsers();
                 }
                 else
                     MessageBox.Show("User could not be found");
@@ -68,5 +80,7 @@ namespace SoloProject
             LeaderboardScreen adminLeaderboard = new LeaderboardScreen();
             adminLeaderboard.Show();
         }
+
+
     }
 }

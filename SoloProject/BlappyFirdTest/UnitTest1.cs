@@ -3,6 +3,7 @@ using System;
 using BlappyFird;
 using BlappyFirdContext;
 using System.Linq;
+using static BlappyFird.BlappyFirdLogic;
 
 namespace BlappyFirdTest
 {
@@ -24,6 +25,8 @@ namespace BlappyFirdTest
                 _logic.addUser("Testing", "Tester", DateTime.Now);
                 var afterCount = query.Count();
                 Assert.That(afterCount > beforeCount, Is.EqualTo(true));
+                var id = db.Users.Where(x => x.Username == "Testing").FirstOrDefault().UsersId;
+                _logic.deleteUser(id);
             }
         }
         [Test]
@@ -55,13 +58,13 @@ namespace BlappyFirdTest
         {
             using (var db = new BFContext())
             {
-                var query = db.Users.Join(db.Scores, 
+                var query = db.Users.Where(x => x.Username != "admin").Join(db.Scores, 
                     user => user.UsersId, 
                     score => score.UsersId, 
                     (user, score) => 
-                    new { username = user.Username, highest = score.HighestScore, created = user.Created }).ToList();
+                    new Query { Username = user.Username, Highscore = score.HighestScore, Created = user.Created }).OrderByDescending(x => x.Highscore).ToList();
                 var testQuery = BlappyFirdLogic.GetLeaderboard();
-                Assert.That(query, Is.EqualTo(testQuery));
+                Assert.That(query.All(x => query.Contains(x)), Is.EqualTo(true));
             }
         }
         [Category("Logic/Game Tier")]

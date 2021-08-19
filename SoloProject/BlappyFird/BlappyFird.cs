@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Collections.Generic;
 using BlappyFirdContext;
-
+using System.Diagnostics;
 
 namespace BlappyFird
 {
@@ -65,6 +65,31 @@ namespace BlappyFird
                     return true;
                 else
                     return false;
+            }
+        }
+        public bool updateUser(int userId, string username, string password)
+        {
+            using (var db = new BFContext())
+            {
+                var user = db.Users.Where(u => u.UsersId == userId).FirstOrDefault();
+                if (user == null)
+                {
+                    Debug.WriteLine($"User: {userId} not found");
+                    return false;
+                }
+                user.Username = username;
+                user.Password = password;
+                try
+                {
+                    db.SaveChanges();
+                    selectedUser = user;
+                }
+                catch(Exception e)
+                {
+                    Debug.WriteLine($"Error updating {userId}");
+                    return false;
+                }
+                return true;
             }
         }
         public void updateScore(int userId, int score)

@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SoloProject"
         mc:Ignorable="d"
-        Title="AdminScreen" Height="350" Width="300">
+        Title="AdminScreen" Height="350" Width="310">
     <Border Background="LightGreen" CornerRadius="20" Margin="20, 20, 20,11">
         <StackPanel Margin="20">
             <Label Content="Admin Page" Foreground="White" FontSize="25" HorizontalAlignment="Center"/>
@@ -45,7 +45,7 @@
                     </Grid>
                 </Grid>
                 <Button x:Name="btnLeaderboard" Click="btnLeaderboard_Click" Content="Go to Leaderboard" HorizontalAlignment="Center" Margin="0,146,0,-50" Width="138"/>
-                <Button Name="btnReturn" Click="btnReturn_Click" Content="Return to Login page" HorizontalAlignment="Center" FontSize="18" Margin="0,179,0,-89" Width="189"/>
+                <Button Name="btnReturn" Click="btnReturn_Click" Content="Return to Login page" HorizontalAlignment="Center" FontSize="18" Margin="0,179,0,-89" Width="176"/>
             </Grid>
         </StackPanel>
     </Border>

@@ -15,6 +15,7 @@ using System.Windows.Shapes;
 using System.Windows.Threading;
 using System.Timers;
 using BlappyFird;
+using System.Media;
 
 namespace SoloProject
 {
@@ -180,6 +181,9 @@ namespace SoloProject
         {
             gameTimer.Stop();
             gameOver = true;
+            MediaPlayer player = new MediaPlayer();
+            player.Open(new Uri("C:\\Users\\h8bmf\\source\\repos\\SpartaGlobalSoloProject\\SoloProject\\SoloProject\\sounds\\DeathSound.mp3", UriKind.RelativeOrAbsolute));
+            player.Play();
             int newScore = Convert.ToInt32(score);
             _logic.updateScore(id, newScore);
             txtScore.Content += " Game Over!!! Press R to restart.";
