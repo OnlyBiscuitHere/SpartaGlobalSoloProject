@@ -16,8 +16,25 @@
         <Image Height="390" Width="66" Source="images/pipeBottom.png" Tag="obs3" Canvas.Left="426" Canvas.Top="292" />
         <Image Height="390" Width="66" Source="images/pipeTop.png" Tag="obs3" Canvas.Left="426" Canvas.Top="-214" />
         <Image Name="flappyBird" Height="36" Width="50" Source="images/flappyBird.png" Stretch="Fill" Canvas.Top="190" Canvas.Left="10" />
-        <Label Name="txtScore" FontSize="18" FontWeight="ExtraBold" Content="Score: 0"/>
-        <Label Name="txtExtra1" FontSize="16" FontWeight="ExtraBlack" Content="" Canvas.Top="17"/>
-        <Label Name="txtExtra2" FontSize="16" FontWeight="ExtraBlack" Content="" Canvas.Top="33"/>
+        <Label Name="txtScore" FontSize="18" FontWeight="ExtraBold" Content="Score: 0">
+            <Label.Effect>
+                <DropShadowEffect ShadowDepth="0" Opacity="1" BlurRadius="4" Color="LightGreen"/>
+            </Label.Effect>
+        </Label>
+        <Label Name="txtExtra3" FontSize="16" FontWeight="ExtraBlack" Content="" Canvas.Top="201" Canvas.Left="140">
+            <Label.Effect>
+                <DropShadowEffect ShadowDepth="0" Opacity="1" BlurRadius="4" Color="LightGreen"/>
+            </Label.Effect>
+        </Label>
+        <Label Name="txtExtra1" FontSize="16" FontWeight="ExtraBlack" Content="" Canvas.Top="170" Canvas.Left="60">
+            <Label.Effect>
+                <DropShadowEffect ShadowDepth="0" Opacity="1" BlurRadius="4" Color="LightGreen"/>
+            </Label.Effect>
+        </Label>
+        <Label Name="txtExtra2" FontSize="16" FontWeight="ExtraBlack" Content="" Canvas.Top="186" Canvas.Left="90">
+            <Label.Effect>
+                <DropShadowEffect ShadowDepth="0" Opacity="1" BlurRadius="4" Color="LightGreen"/>
+            </Label.Effect>
+        </Label>
     </Canvas>
 </Window>

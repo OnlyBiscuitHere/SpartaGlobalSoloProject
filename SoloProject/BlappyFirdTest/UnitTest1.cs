@@ -30,6 +30,20 @@ namespace BlappyFirdTest
             }
         }
         [Test]
+        public void CheckingAUserExists_ReturnsTrue()
+        {
+            using (var db = new BFContext())
+            {
+                var query = from u in db.Users where u.Username == "bfung" && u.Password == "123" select u;
+                bool check = false;
+                if (query.Count() == 1)
+                {
+                    check = true;
+                }
+                Assert.That(check, Is.EqualTo(_logic.checkUser("bfung", "123")));
+            }
+        }
+        [Test]
         public void WhenAnAdminRemovesAUser_NumberOfUsersDecrements()
         {
             using (var db = new BFContext())
@@ -68,6 +82,7 @@ namespace BlappyFirdTest
             }
         }
         [Category("Logic/Game Tier")]
+        [Ignore("Feedback section has not yet been implemented")]
         [Test]
         public void WhenAUserSubmitsFeedback_FeedbackIsRecieved()
         {

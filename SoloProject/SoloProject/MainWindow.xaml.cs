@@ -27,6 +27,8 @@ namespace SoloProject
         private BlappyFirdLogic _logic = new BlappyFirdLogic();
         Timer gameTimer = new Timer();
         //private BlappyFirdLogic _blappyFird;
+        MediaPlayer backing = new MediaPlayer();
+        MediaPlayer death = new MediaPlayer();
         public double score;
         public int gravity = 8;
         public bool gameOver;
@@ -46,17 +48,22 @@ namespace SoloProject
             gameTimer.AutoReset = true;
             gameTimer.Enabled = true;
             StartGame();
+            backing.Open(new Uri("C:\\Users\\h8bmf\\source\\repos\\SpartaGlobalSoloProject\\SoloProject\\SoloProject\\sounds\\BackTrack.mp3", UriKind.RelativeOrAbsolute));
+            backing.Position = TimeSpan.Zero;
+            backing.Volume = 0.1;
+            backing.Play();
         }
         private void MainEventTimer(object sender, EventArgs e)
         {
             this.Dispatcher.Invoke(() =>
             {
-                txtScore.Content = $"Player: {user} Score: {score}";
+                txtScore.Content = $"Player: {user} Score: {score}"; 
                 hitBox = new Rect(Canvas.GetLeft(flappyBird), Canvas.GetTop(flappyBird), flappyBird.Width - 12, flappyBird.Height);
                 Canvas.SetTop(flappyBird, Canvas.GetTop(flappyBird) + gravity);
                 if (Canvas.GetTop(flappyBird) < -30 || Canvas.GetTop(flappyBird) + flappyBird.Height > 460)
                 {
                     EndGame();
+
                 }
                 foreach (var x in Game.Children.OfType<Image>())
                 {
@@ -101,6 +108,8 @@ namespace SoloProject
             if (e.Key == Key.R && gameOver == true)
             {
                 StartGame();
+                backing.Play();
+                ClearScreen();
             }
             if (e.Key == Key.Escape && gameOver == true)
             {
@@ -117,7 +126,6 @@ namespace SoloProject
                 Application.Current.MainWindow = newGame;
                 newGame.Show();
                 this.Close();
-                
             }
             if (e.Key == Key.N && gameOver == true)
             {
@@ -181,14 +189,21 @@ namespace SoloProject
         {
             gameTimer.Stop();
             gameOver = true;
-            MediaPlayer player = new MediaPlayer();
-            player.Open(new Uri("C:\\Users\\h8bmf\\source\\repos\\SpartaGlobalSoloProject\\SoloProject\\SoloProject\\sounds\\DeathSound.mp3", UriKind.RelativeOrAbsolute));
-            player.Play();
+            backing.Stop();
+            death.Open(new Uri("C:\\Users\\h8bmf\\source\\repos\\SpartaGlobalSoloProject\\SoloProject\\SoloProject\\sounds\\DeathSound.mp3", UriKind.RelativeOrAbsolute));
+            death.Volume = 0.1;
+            death.Play();
             int newScore = Convert.ToInt32(score);
             _logic.updateScore(id, newScore);
-            txtScore.Content += " Game Over!!! Press R to restart.";
+            txtExtra3.Content = "Game Over!!! Press R to restart.";
             txtExtra1.Content = "Press L to view Leaderboard, Press ESC to Login Screen";
             txtExtra2.Content = "Y to increase difficulty, N to decrease difficulty";
+        }
+        private void ClearScreen()
+        {
+            txtExtra1.Content = "";
+            txtExtra2.Content = "";
+            txtExtra3.Content = "";
         }
     }
 }
